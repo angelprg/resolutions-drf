@@ -1,41 +1,53 @@
-* New Year Resolutions API
+# New Year Resolutions API
 
 An API using Django + Django Rest Framework
 
 
-** Python
+## Python
 [https://www.python.org/]
 
-** python virtual environment
-`python -m venv .venv`
-`source .venv/bin/activate`
+## python virtual environment
+```
+python -m venv .venv
+source .venv/bin/activate
+```
 [https://docs.python.org/3/library/venv.html]
 
-** Install Django + Django Rest Framework
-`pip install django djangorestframework`
+## Install Django + Django Rest Framework
+```
+pip install django djangorestframework
+```
 
-** Create dependencies file
-`pip freeze > requirements.txt`
+## Create dependencies file
+```
+pip freeze > requirements.txt
+```
 
-** Create the Django Project
-`django-admin startproject newyearresolutions .`
+## Create the Django Project
+```
+django-admin startproject newyearresolutions .
+```
 
-** Create the resolutions app
-`python manage.py startapp resolutions`
+## Create the resolutions app
+```
+python manage.py startapp resolutions
+```
 
-** Add the `rest_framework` module and `resolutions` app to the django project settings.
-`newyearresolutions/settings.py`
-`
+## Add the `rest_framework` module and `resolutions` app to the django project settings.
+```
+newyearresolutions/settings.py
+```
+```
 INSTALLED_APPS = [
     ...
     'rest_framework',
     'resolutions.apps.ResolutionsConfig',
 ]
-`
+```
 
-** Create the `Resolution` model
-`resolutions/models.py`
-`
+## Create the `Resolution` model
+```resolutions/models.py```
+```
 class Resolution(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -44,28 +56,32 @@ class Resolution(models.Model):
 
 class ResolutionCategory(models.Model):
     title = models.CharField(max_length=100)
-`
-** Register the Resolution Model to the admin interface
-`resolutions/admin.py`
-`
+```
+## Register the Resolution Model to the admin interface
+```resolutions/admin.py```
+```
 from resolutions.models import Resolution, ResolutionCategory
 
 admin.site.register(Resolution)
 admin.site.register(ResolutionCategory)
-`
+```
 
-** Create and runing first migration
-`python manage.py makemigrations`
-`python manage.py migrate`
+## Create and runing first migration
+```
+python manage.py makemigrations
+python manage.py migrate
+```
 
-** Create our superuser
-`python manage.py createsuperuser`
+## Create our superuser
+```
+python manage.py createsuperuser
+```
 
-* DRF
+# DRF
 
-** Create Serializer
-Create a file `resolutions/serializers.py`
-`
+## Create Serializer
+Create a file ```resolutions/serializers.py```
+```
 from rest_framework import serializers
 from resolutions.models import Resolution, ResolutionCategory
 
@@ -78,11 +94,11 @@ class ResolutionCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ResolutionCategory
         fields = ['title']
-`
+```
 
-** Create views
-Edit the file `resolutions/views.py`
-`
+## Create views
+Edit the file ```resolutions/views.py```
+```
 from django.http import HttpResponse
 from resolutions.models import ResolutionCategory, Resolution
 from resolutions.serializers import ResolutionSerializer, ResolutionCategorySerializer
@@ -103,18 +119,18 @@ class ResolutionCategoryList(generics.ListCreateAPIView):
 class ResolutionCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ResolutionCategory.objects.all()
     serializer_class = ResolutionCategorySerializer
-`
+```
 
-** Configure routes (urls)
+## Configure routes (urls)
 Edit the project urls file `newyearresolutions/urls.py`
-`
+```
 from django.urls import path, include
 ...
 path('api/v1/', include('resolutions.urls')),
-`
+```
 
 Create the app urls file `resolutions/urls.py`
-`
+```
 from django.urls import path
 from resolutions import views
 
@@ -124,7 +140,7 @@ urlpatterns = [
     path('resolution-categories/',  views.ResolutionCategoryList.as_view()),
     path('resolution-categories/<int:pk>',  views.ResolutionCategoryDetail.as_view()),
 ]
-`
+```
 
 
 
